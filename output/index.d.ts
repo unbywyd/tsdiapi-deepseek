@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import type { AppContext, AppPlugin } from "@tsdiapi/server";
 import { DeepSeekProvider } from "./provider.js";
 export type PluginOptions = {

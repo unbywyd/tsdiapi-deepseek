@@ -39,8 +39,7 @@
   },
   "peerDependencies": {
     "@sinclair/typebox": "^0.34.31",
-    "@tsdiapi/server": "^0.2.0",
-    "reflect-metadata": "^0.2.2"
+    "@tsdiapi/server": "^0.2.0"
   },
   "dependencies": {
     "openai": "^4.85.4"

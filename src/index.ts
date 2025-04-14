@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import type { AppContext, AppPlugin } from "@tsdiapi/server";
 import { DeepSeekProvider, DeepSeekResponse } from "./provider.js";
 import type { FastifyInstance } from "fastify";

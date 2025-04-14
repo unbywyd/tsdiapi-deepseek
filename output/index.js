@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { DeepSeekProvider } from "./provider.js";
 let deepseekProvider = null;
 const defaultConfig = {
