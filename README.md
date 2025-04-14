@@ -1,26 +1,26 @@
-# **🚀 TSDIAPI GPT Plugin**
+# **🚀 TSDIAPI DeepSeek Plugin**
 
-A **TSDIAPI** plugin that provides seamless integration with OpenAI's GPT models, enabling structured JSON output using [TypeBox](https://github.com/sinclairzx81/typebox) schemas and flexible chat interactions.
+A **TSDIAPI** plugin that provides seamless integration with DeepSeek's AI models, enabling structured JSON output using [TypeBox](https://github.com/sinclairzx81/typebox) schemas and flexible chat interactions.
 
 ---
 
 ## 📦 Installation
 
 ```bash
-npm install --save @tsdiapi/gpt @sinclair/typebox
+npm install --save @tsdiapi/deepseek @sinclair/typebox
 ```
 
 Then register the plugin in your **TSDIAPI** app:
 
 ```ts
 import { createApp } from "@tsdiapi/server";
-import createPlugin from "@tsdiapi/gpt";
+import createPlugin from "@tsdiapi/deepseek";
 
 createApp({
   plugins: [
     createPlugin({
-      apiKey: "your-openai-api-key", // Required
-      model: "gpt-4o-mini",          // Optional (default)
+      apiKey: "your-deepseek-api-key", // Required
+      model: "deepseek-chat",          // Optional (default)
     }),
   ],
 });
@@ -31,7 +31,7 @@ createApp({
 ## 🚀 Features
 
 - 📘 **Structured JSON output** with [TypeBox](https://github.com/sinclairzx81/typebox)
-- 🧠 **Model-agnostic**: Supports `gpt-4o`, `gpt-3.5-turbo`, etc.
+- 🧠 **Model-agnostic**: Supports various DeepSeek models
 - ✨ **Prompt-to-structured-object** in one call
 - ⚡ **Simple chat** and **typed response** support
 - 🧩 **Composable schemas** and type inference
@@ -42,8 +42,8 @@ createApp({
 
 | Option   | Type     | Default         | ENV Variable      | Description                 |
 |----------|----------|-----------------|-------------------|-----------------------------|
-| `apiKey` | `string` | `""`            | `OPENAI_API_KEY`  | OpenAI API Key _(Required)_ |
-| `model`  | `string` | `"gpt-4o-mini"` | `OPENAI_MODEL_ID` | Default GPT model           |
+| `apiKey` | `string` | `""`            | `DEEPSEEK_API_KEY`| DeepSeek API Key _(Required)_ |
+| `model`  | `string` | `"deepseek-chat"`| `DEEPSEEK_MODEL_ID` | Default DeepSeek model     |
 
 ---
 
@@ -53,7 +53,7 @@ createApp({
 
 ```ts
 import { Type } from "@sinclair/typebox";
-import { getGPTProvider } from "@tsdiapi/gpt";
+import { useDeepSeekProvider } from "@tsdiapi/deepseek";
 
 const UserSchema = Type.Object({
   name: Type.String(),
@@ -61,8 +61,8 @@ const UserSchema = Type.Object({
 });
 
 async function run() {
-  const gpt = getGPTProvider();
-  const response = await gpt.jsonDTO("Generate a user", UserSchema);
+  const deepseek = useDeepSeekProvider();
+  const response = await deepseek.jsonDTO("Generate a user", UserSchema);
   console.log(response?.result);
 }
 ```
@@ -74,11 +74,11 @@ async function run() {
 ### 💬 Basic Chat Completion
 
 ```ts
-import { getGPTProvider } from "@tsdiapi/gpt";
+import { useDeepSeekProvider } from "@tsdiapi/deepseek";
 
 async function run() {
-  const gpt = getGPTProvider();
-  const response = await gpt.chat("Tell me a dad joke.");
+  const deepseek = useDeepSeekProvider();
+  const response = await deepseek.chat("Tell me a dad joke.");
   console.log(response?.result);
 }
 ```
@@ -99,8 +99,8 @@ const schema = {
   required: ["title", "description"],
 };
 
-const gpt = getGPTProvider();
-const response = await gpt.JsonString("Describe a new product", schema);
+const deepseek = useDeepSeekProvider();
+const response = await deepseek.JsonString("Describe a new product", schema);
 console.log(response);
 ```
 
@@ -145,4 +145,4 @@ Have ideas? Want to add more features? PRs and issues are welcome!
 
 ---
 
-🚀 Happy coding with **TSDIAPI GPT Plugin**!
+🚀 Happy coding with **TSDIAPI DeepSeek Plugin**!

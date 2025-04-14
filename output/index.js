@@ -1,44 +1,43 @@
 import "reflect-metadata";
-import { GPTProvider } from "./provider.js";
-let gptProvider = null;
+import { DeepSeekProvider } from "./provider.js";
+let deepseekProvider = null;
 const defaultConfig = {
     apiKey: "",
-    model: "gpt-4o-mini",
+    model: "deepseek-chat",
 };
 class App {
-    name = 'tsdiapi-gpt';
+    name = 'tsdiapi-deepseek';
     config;
     context;
     provider;
     constructor(config) {
         this.config = { ...defaultConfig, ...config };
-        this.provider = new GPTProvider();
+        this.provider = new DeepSeekProvider();
     }
     async onInit(ctx) {
         const logger = ctx.fastify.log;
-        if (gptProvider) {
-            logger.warn("⚠ GPT Plugin is already initialized. Skipping re-initialization.");
+        if (deepseekProvider) {
+            logger.warn("⚠ DeepSeek Plugin is already initialized. Skipping re-initialization.");
             return;
         }
         this.context = ctx;
         const config = ctx.projectConfig;
-        this.config.apiKey = config.get('OPENAI_API_KEY', this.config.apiKey);
-        this.config.model = config.get('OPENAI_MODEL_ID', this.config.model || defaultConfig.model);
+        this.config.apiKey = config.get('DEEPSEEK_API_KEY', this.config.apiKey);
+        this.config.model = config.get('DEEPSEEK_MODEL_ID', this.config.model || defaultConfig.model);
         if (!this.config.apiKey) {
-            throw new Error("❌ GPT Plugin is missing an API key.");
+            throw new Error("❌ DeepSeek Plugin is missing an API key.");
         }
         this.provider.init(this.config);
-        gptProvider = this.provider;
-        ctx.fastify.decorate("gpt", this.provider);
+        deepseekProvider = this.provider;
+        ctx.fastify.decorate('deepseek', this.provider);
     }
 }
-export function useGPTProvider() {
-    if (!gptProvider) {
-        throw new Error("❌ GPT Plugin is not initialized. Use createPlugin() first.");
+export function useDeepSeekProvider() {
+    if (!deepseekProvider) {
+        throw new Error("❌ DeepSeek Provider is not initialized. Please call init() first.");
     }
-    return gptProvider;
+    return deepseekProvider;
 }
-export { GPTProvider };
 export default function createPlugin(config) {
     return new App(config);
 }

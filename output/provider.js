@@ -1,52 +1,63 @@
 import { OpenAI } from "openai";
 import { Value } from '@sinclair/typebox/value';
-export class GPTProvider {
+export class DeepSeekProvider {
     openai;
     config;
     constructor() {
     }
     init(config) {
         if (!config.apiKey) {
-            throw new Error("❌ OpenAI API key is required.");
+            throw new Error("❌ DeepSeek API key is required.");
         }
         this.config = config;
-        this.openai = new OpenAI({ apiKey: config.apiKey });
+        this.openai = new OpenAI({
+            apiKey: config.apiKey,
+            baseURL: 'https://api.deepseek.com'
+        });
     }
     async jsonDTO(prompt, schema, model) {
         if (!this.openai) {
-            console.error("❌ OpenAI is not initialized. Please call init() first.");
+            console.error("❌ DeepSeek is not initialized. Please call init() first.");
             return null;
         }
         try {
+            const systemPrompt = `You are a helpful assistant that outputs JSON. Please provide the response in the following JSON schema format: ${JSON.stringify(schema)}`;
             const response = await this.openai.chat.completions.create({
                 model: model || this.config.model,
-                messages: [{ role: "user", content: prompt }],
-                response_format: {
-                    type: "json_schema",
-                    json_schema: {
-                        name: "Schema",
-                        schema: schema,
-                    },
-                },
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: prompt }
+                ],
+                response_format: { type: "json_object" }
             });
             const usage = response.usage;
             const message = response.choices[0]?.message;
-            const rawData = JSON.parse(message?.content || "{}");
-            const result = Value.Cast(schema, rawData);
-            return {
-                message,
-                usage,
-                result,
-            };
+            const content = message?.content;
+            if (!content) {
+                console.error("❌ No content in response");
+                return null;
+            }
+            try {
+                const result = JSON.parse(content);
+                return {
+                    result: Value.Decode(schema, result),
+                    usage,
+                    message
+                };
+            }
+            catch (e) {
+                console.error("❌ Failed to parse JSON response:", e);
+                return null;
+            }
         }
-        catch (error) {
-            console.error("❌ GPT JSON Parsing Error:", error);
+        catch (e) {
+            console.error("❌ Error calling DeepSeek API:", e);
             return null;
         }
     }
     async chat(prompt, model) {
         if (!this.openai) {
-            console.error("❌ OpenAI is not initialized. Please call init() first.");
+            console.error("❌ DeepSeek is not initialized. Please call init() first.");
             return null;
         }
         try {
@@ -62,13 +73,13 @@ export class GPTProvider {
             };
         }
         catch (error) {
-            console.error("❌ GPT Chat Error:", error);
+            console.error("❌ DeepSeek Chat Error:", error);
             return null;
         }
     }
     async chatString(prompt, model) {
         if (!this.openai) {
-            console.error("❌ OpenAI is not initialized. Please call init() first.");
+            console.error("❌ DeepSeek is not initialized. Please call init() first.");
             return;
         }
         const response = await this.openai.chat.completions.create({
@@ -79,19 +90,19 @@ export class GPTProvider {
     }
     async JsonString(prompt, jsonSchema, model) {
         if (!this.openai) {
-            console.error("❌ OpenAI is not initialized. Please call init() first.");
+            console.error("❌ DeepSeek is not initialized. Please call init() first.");
             return null;
         }
         try {
             const response = await this.openai.chat.completions.create({
                 model: model || this.config.model,
                 messages: [{ role: "user", content: prompt }],
-                response_format: { type: "json_schema", json_schema: jsonSchema },
+                response_format: { type: "json_object" }
             });
             return JSON.parse(response.choices[0]?.message?.content || "{}");
         }
         catch (error) {
-            console.error("❌ GPT JSON Parsing Error:", error);
+            console.error("❌ DeepSeek JSON Parsing Error:", error);
             return null;
         }
     }
