@@ -1,0 +1,36 @@
+{
+  "name": "deepseek",
+  "description": "A TSDIAPI plugin to extend API functionality with DeepSeek.",
+  "variables": [
+    {
+      "name": "DEEPSEEK_API_KEY",
+      "type": "string",
+      "default": "",
+      "configurable": true,
+      "description": "Your DeepSeek API key",
+      "validate": {
+        "type": "string",
+        "minLength": 20
+      },
+      "inquirer": {
+        "type": "input",
+        "message": "Enter your DeepSeek API key:"
+      }
+    },
+    {
+      "name": "DEEPSEEK_MODEL_ID",
+      "type": "string",
+      "default": "deepseek-chat",
+      "configurable": true,
+      "description": "Default DeepSeek model to use (deepseek-chat or deepseek-reasoner)",
+      "inquirer": {
+        "type": "input",
+        "message": "Enter the default DeepSeek model to use:"
+      }
+    }
+  ],
+  "postMessages": [
+    "✅ DeepSeek Plugin has been successfully installed!",
+    "🔹 Use `const gpt = useDeepSeekProvider();` to start using DeepSeek in your project."
+  ]
+}

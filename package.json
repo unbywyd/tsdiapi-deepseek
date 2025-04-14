@@ -1,0 +1,48 @@
+{
+  "name": "@tsdiapi/deepseek",
+  "version": "0.1.0",
+  "description": "A TSDIAPI plugin to extend API functionality with DeepSeek.",
+  "main": "output/index.js",
+  "types": "output/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "unbywyd",
+  "engines": {
+    "node": ">=18.19.0"
+  },
+  "keywords": [
+    "tsdiapi",
+    "deepseek"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unbywyd/tsdiapi-deepseek"
+  },
+  "homepage": "https://github.com/unbywyd/tsdiapi-deepseek",
+  "files": [
+    "output/",
+    "README.md",
+    "LICENSE.md",
+    "tsdiapi.config.json",
+    "files/",
+    "generators/"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "typescript": "^5.7.3"
+  },
+  "peerDependencies": {
+    "@sinclair/typebox": "^0.34.31",
+    "@tsdiapi/server": "^0.2.0",
+    "reflect-metadata": "^0.2.2"
+  },
+  "dependencies": {
+    "openai": "^4.85.4"
+  }
+}
